@@ -1,18 +1,36 @@
 package com.example.demo.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.example.demo.dto.TarefaDto;
 import com.example.demo.model.Tarefa;
 import com.example.demo.repository.TarefaRepository;
 
 @Service
 public class TarefaService {
 	
-	@Autowired
-	private TarefaRepository tarefa_repository;
 	
+	private final TarefaRepository tarefa_repository;
+	
+	private final ModelMapper mapper;
+	
+
+	 
+	
+	
+	@Autowired
+	public TarefaService(TarefaRepository tarefa_repository, ModelMapper mapper) {
+		
+		this.tarefa_repository = tarefa_repository;
+		this.mapper = mapper;
+	}
+
 
 	public Tarefa salvar (Tarefa tarefa) {
 		
@@ -22,10 +40,11 @@ public class TarefaService {
 	}
 	
 	
-	public List<Tarefa> ListaTodasasTarefas(){
+	public List<TarefaDto> ListaTodasasTarefas(){
 		
-		return tarefa_repository.findAll();
-		
+		  return tarefa_repository.findAll().stream()
+				  .map(tarefa -> mapper.map(tarefa, TarefaDto.class))
+				  .collect(Collectors.toList());
 	}
 	
 	
