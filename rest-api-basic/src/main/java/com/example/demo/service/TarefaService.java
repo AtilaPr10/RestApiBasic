@@ -1,10 +1,8 @@
 package com.example.demo.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +36,25 @@ public class TarefaService {
 		
 		
 	}
+	
+	
+	public List<TarefaDto> buscarTarefaPorNome(String nome) {
+		
+		return tarefa_repository.findByDescricao(nome).stream()
+				.map(tarefa -> mapper.map(tarefa, TarefaDto.class))
+				.collect(Collectors.toList());
+				
+	}
+	
+	
+	public List<TarefaDto> buscarTarefaPorParteDoNome(String partenome){
+		
+		return tarefa_repository.pesquisaPorParteDoNome(partenome).stream()
+				.map(tarefa -> mapper.map(tarefa,TarefaDto.class))
+                .collect(Collectors.toList());		
+		
+	}
+	
 	
 	
 	public List<TarefaDto> ListaTodasasTarefas(){
